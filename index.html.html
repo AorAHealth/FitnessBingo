@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Bingo Challenge 2026</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin: 0 0 10px 0;
+        }
+        
+        .name-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .name-box input {
+            padding: 15px;
+            font-size: 1.2em;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            width: 400px;
+            max-width: 90%;
+        }
+        
+        .name-display {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+            gap: 20px;
+        }
+        
+        .bingo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .bingo-box {
+            background: #d6e9f8;
+            border: 3px solid #0d6efd;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 140px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .bingo-box.red {
+            background: #f8d6d6;
+            border-color: #dc3545;
+        }
+        
+        .bingo-box.purple {
+            background: #e9d6f8;
+            border-color: #8b5cf6;
+        }
+        
+        .bingo-box.checked {
+            background: #90EE90;
+            border-color: #28a745;
+        }
+        
+        .bingo-box:hover {
+            transform: scale(1.05);
+        }
+        
+        .box-text {
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        
+        .box-code {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4em;
+            color: white;
+            display: none;
+        }
+        
+        .checked .checkmark {
+            display: block;
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+        }
+        
+        .stat-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.3em;
+        }
+        
+        .reset-button {
+            width: 100%;
+            padding: 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .reset-button:hover {
+            background: #c82333;
+        }
+        
+        .limitations {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .limit-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .limit-card h3 {
+            margin-top: 0;
+        }
+        
+        .solution-box {
+            background: #e7f3ff;
+            padding: 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 3px solid #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏋️ Fitness Bingo Challenge 2026 🏋️</h1>
+            <p>Your Personal Journey to Fitness Excellence</p>
+        </div>
+        
+        <div class="name-box">
+            <input type="text" id="userName" placeholder="Enter your name here...">
+            <div class="name-display" id="userDisplay"></div>
+        </div>
+        
+        <div class="main-grid">
+            <div class="bingo-container">
+                <h2>My Fitness Bingo Board</h2>
+                <div class="bingo-grid" id="grid"></div>
+            </div>
+            
+            <div class="sidebar">
+                <h3>📊 My Progress</h3>
+                <div class="stat-box">
+                    <div>Completed</div>
+                    <div class="stat-number" id="completed">0/25</div>
+                </div>
+                <div class="stat-box">
+                    <div>Lines</div>
+                    <div class="stat-number" id="lines">0</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress">0%</div>
+                </div>
+                <button class="reset-button" onclick="reset()">🔄 Reset Board</button>
+            </div>
+        </div>
+        
+        <div class="limitations">
+            <h2>⚠️ Important Information</h2>
+            
+            <div class="limit-card">
+                <h3>📱 Device-Specific Progress</h3>
+                <p>Progress saves only on this device and browser.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Use one device or take screenshots regularly.
+                </div>
+            </div>
+            
+            <div class="limit-card">
+                <h3>🔤 Name Must Match Exactly</h3>
+                <p>"Sarah" and "sarah" are different users.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Write down your name exactly as you type it.
+                </div>
+            </div>
+            
+            <div class="limit-card">
+                <h3>🗑️ Browser Cache Clearing</h3>
+                <p>Clearing browser data deletes your progress permanently.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Take monthly screenshots as backup.
+                </div>
+            </div>
+            
+            <div class="limit-card">
+                <h3>🌐 Browser-Specific Storage</h3>
+                <p>Chrome and Firefox store data separately.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Always use the same browser.
+                </div>
+            </div>
+            
+            <div class="limit-card">
+                <h3>👥 Shared Devices</h3>
+                <p>Multiple people can use this, but must remember their exact names.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Add initials if names are similar (e.g., "Sarah J").
+                </div>
+            </div>
+            
+            <div class="limit-card">
+                <h3>🔒 No Password Protection</h3>
+                <p>Anyone who knows your name can access your board.</p>
+                <div class="solution-box">
+                    <strong>💡 Solution:</strong> Use unique names or personal devices.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const boxes = [
+            {id:'B1', text:'100 burpees for time', type:'red'},
+            {id:'B2', text:'Complete 10 workouts in one month', type:'blue'},
+            {id:'B3', text:'Burn 500 calories (women) / 700 calories (men) in one session', type:'blue'},
+            {id:'B4', text:'Complete a 5K run', type:'blue'},
+            {id:'B5', text:'Hold a 2-minute wall sit', type:'blue'},
+            {id:'I1', text:'Complete 4 Sunday Run Club sessions', type:'blue'},
+            {id:'I2', text:'21-15-9 Thrusters and calories in under 7 minutes', type:'red'},
+            {id:'I3', text:'50 air squats unbroken', type:'blue'},
+            {id:'I4', text:'Complete 100 reps of any exercise in one workout', type:'blue'},
+            {id:'I5', text:'Complete 150 calories on the ski', type:'blue'},
+            {id:'N1', text:'75 kettlebell swings unbroken', type:'blue'},
+            {id:'N2', text:'Complete a workout in under 12 minutes', type:'blue'},
+            {id:'N3', text:'SUPER CHALLENGE: Complete a 10K run', type:'purple', free:true},
+            {id:'N4', text:'Burn 2000 calories (women) / 2500 calories (men) in one week', type:'blue'},
+            {id:'N5', text:'Row 2000 meters for time', type:'blue'},
+            {id:'G1', text:'Complete 15 workouts in one month', type:'blue'},
+            {id:'G2', text:'Achieve your first box jump or increase height by 6 inches', type:'blue'},
+            {id:'G3', text:'Bodyweight walking lunges to the bridge and back', type:'blue'},
+            {id:'G4', text:'Attend classes consistently for 6 weeks (at least 1 per week)', type:'red'},
+            {id:'G5', text:'20 pull-ups (can be assisted or banded)', type:'blue'},
+            {id:'O1', text:'Complete "Cindy" benchmark (5 pull-ups, 10 push-ups, 15 squats AMRAP 20 min)', type:'blue'},
+            {id:'O2', text:'Farmer carry 100 meters with challenging weight', type:'blue'},
+            {id:'O3', text:'Complete 20 workouts in one month', type:'blue'},
+            {id:'O4', text:'Hold a 3-minute plank', type:'blue'},
+            {id:'O5', text:'Deadlift 1.5x bodyweight for 3 reps', type:'red'}
+        ];
+
+        let name = '';
+        let data = {};
+
+        function draw() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            boxes.forEach(box => {
+                const div = document.createElement('div');
+                div.className = 'bingo-box ' + box.type;
+                if (data[box.id]) div.className += ' checked';
+                div.innerHTML = `
+                    <div class="box-text">${box.text}</div>
+                    <div class="box-code">${box.free ? 'FREE' : box.id}</div>
+                    <div class="checkmark">✓</div>
+                `;
+                div.onclick = () => toggle(box.id);
+                grid.appendChild(div);
+            });
+        }
+
+        function toggle(id) {
+            if (!name) {
+                alert('Please enter your name first!');
+                return;
+            }
+            data[id] = !data[id];
+            save();
+            draw();
+            updateStats();
+        }
+
+        function save() {
+            if (name) {
+                localStorage.setItem('name', name);
+                localStorage.setItem('data_' + name, JSON.stringify(data));
+            }
+        }
+
+        function load() {
+            const saved = localStorage.getItem('name');
+            if (saved) {
+                name = saved;
+                document.getElementById('userName').value = name;
+                const savedData = localStorage.getItem('data_' + name);
+                if (savedData) data = JSON.parse(savedData);
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            document.getElementById('userDisplay').textContent = name ? name + "'s Progress Tracker" : '';
+        }
+
+        function updateStats() {
+            const done = Object.values(data).filter(v => v).length;
+            const pct = Math.round((done / 25) * 100);
+            document.getElementById('completed').textContent = done + '/25';
+            document.getElementById('progress').textContent = pct + '%';
+            document.getElementById('progress').style.width = pct + '%';
+            
+            const linesSets = [
+                ['B1','B2','B3','B4','B5'],['I1','I2','I3','I4','I5'],['N1','N2','N3','N4','N5'],
+                ['G1','G2','G3','G4','G5'],['O1','O2','O3','O4','O5'],['B1','I1','N1','G1','O1'],
+                ['B2','I2','N2','G2','O2'],['B3','I3','N3','G3','O3'],['B4','I4','N4','G4','O4'],
+                ['B5','I5','N5','G5','O5'],['B1','I2','N3','G4','O5'],['B5','I4','N3','G2','O1']
+            ];
+            let linesCount = 0;
+            linesSets.forEach(line => {
+                if (line.every(id => data[id])) linesCount++;
+            });
+            document.getElementById('lines').textContent = linesCount;
+        }
+
+        function reset() {
+            if (!name) {
+                alert('Please enter your name first!');
+                return;
+            }
+            if (confirm('Reset ' + name + "'s board? This cannot be undone!")) {
+                data = {};
+                save();
+                draw();
+                updateStats();
+            }
+        }
+
+        document.getElementById('userName').addEventListener('input', (e) => {
+            name = e.target.value.trim();
+            const savedData = localStorage.getItem('data_' + name);
+            data = savedData ? JSON.parse(savedData) : {};
+            updateDisplay();
+            draw();
+            updateStats();
+        });
+
+        load();
+        draw();
+        updateStats();
+    </script>
+</body>
+</html>
